@@ -72,7 +72,11 @@ class _LoginViewState extends State<LoginView> {
 
                     Row(
                       children: [
-                        Text('don\'t have an account '),
+                        Text(
+                          'don\'t have an account ',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        Gap(10),
 
                         GestureDetector(
                           onTap: () {
@@ -85,7 +89,10 @@ class _LoginViewState extends State<LoginView> {
                               ),
                             );
                           },
-                          child: Text('register'),
+                          child: Text(
+                            'register',
+                            style: TextStyle(color: Colors.red),
+                          ),
                         ),
                       ],
                     ),

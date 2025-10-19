@@ -29,53 +29,91 @@ class _LoginViewState extends State<SignupView> {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
-        backgroundColor: AppColors.kPColor,
+        backgroundColor: Colors.white,
         body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 0),
           child: Center(
             child: Form(
               key: formKey,
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Gap(MediaQuery.of(context).size.height * .01),
+              child: Column(
+                children: [
+                  Gap(150),
+                  SvgPicture.asset(
+                    'assets/Hungry_.svg',
+                    color: AppColors.kPColor,
+                  ),
+                  Gap(50),
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: AppColors.kPColor,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(18),
+                          topRight: Radius.circular(18),
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              Gap(MediaQuery.of(context).size.height * .01),
 
-                    SvgPicture.asset('assets/Hungry_.svg'),
-                    Gap(10),
+                              Gap(30),
 
-                    CustomTextField(
-                      hint: 'name',
-                      textController: nameController,
-                    ),
-                    Gap(10),
-                    CustomTextField(
-                      hint: 'Email',
-                      textController: emailController,
-                    ),
-                    Gap(10),
-                    CustomTextField(
-                      hint: 'Password',
-                      isPassword: true,
-                      textController: passwordController,
-                    ),
-                    Gap(10),
-                    CustomTextField(
-                      hint: 'confirm password',
-                      isPassword: true,
-                      textController: confirmController,
-                    ),
-                    Gap(40),
-                    SizedBox(
-                      width: double.infinity,
-                      child: CustomButton(
-                        text: 'SignUp',
-                        onTap: () {
-                          if (formKey.currentState!.validate()) {}
-                        },
+                              CustomTextField(
+                                hint: 'name',
+                                textController: nameController,
+                              ),
+                              Gap(10),
+                              CustomTextField(
+                                hint: 'Email',
+                                textController: emailController,
+                              ),
+                              Gap(10),
+                              CustomTextField(
+                                hint: 'Password',
+                                isPassword: true,
+                                textController: passwordController,
+                              ),
+
+                              Gap(40),
+                              SizedBox(
+                                width: double.infinity,
+                                child: CustomButton(
+                                  text: 'SignUp',
+                                  onTap: () {
+                                    if (formKey.currentState!.validate()) {}
+                                  },
+                                ),
+                              ),
+                              Gap(10),
+                              Row(
+                                children: [
+                                  Text(
+                                    'don\'t have an account ',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  Gap(10),
+
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text(
+                                      'register',
+                                      style: TextStyle(color: Colors.red),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),

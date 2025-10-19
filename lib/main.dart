@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:project/features/auth/views/login_view.dart';
+import 'package:project/features/auth/views/signup_view.dart';
+import 'package:project/features/checkout/views/checkout.dart';
 import 'package:project/root.dart';
 import 'package:project/splash_view.dart';
 
@@ -11,6 +14,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(debugShowCheckedModeBanner: false, home: Root());
+    return MaterialApp(
+      theme: ThemeData(splashColor: Colors.transparent),
+      debugShowCheckedModeBanner: false,
+      home: Root(),
+    );
   }
 }

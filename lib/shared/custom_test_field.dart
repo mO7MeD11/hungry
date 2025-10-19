@@ -39,9 +39,15 @@ class _CustomTextFieldState extends State<CustomTextField> {
       controller: widget.textController,
       obscureText: isObscure,
       decoration: InputDecoration(
+        fillColor: Colors.transparent,
         hintText: widget.hint,
-        enabledBorder: OutlineInputBorder(),
-        focusedBorder: OutlineInputBorder(),
+        hintStyle: TextStyle(color: Colors.white),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.white),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.white),
+        ),
         focusColor: AppColors.kPColor,
         suffixIcon: widget.isPassword
             ? IconButton(
@@ -51,8 +57,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
                   });
                 },
                 icon: isObscure
-                    ? Icon(CupertinoIcons.eye_slash)
-                    : Icon(CupertinoIcons.eye),
+                    ? Icon(CupertinoIcons.eye_slash, color: Colors.white)
+                    : Icon(CupertinoIcons.eye, color: Colors.white),
               )
             : null,
         filled: true,
