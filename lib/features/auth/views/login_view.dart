@@ -1,8 +1,13 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:project/core/constants/app_colors.dart';
+import 'package:project/features/auth/cubit/auth_state.dart';
+import 'package:project/features/auth/cubit/login_cubit.dart';
 import 'package:project/features/auth/views/signup_view.dart';
+import 'package:project/root.dart';
 import 'package:project/shared/custom_button.dart';
 import 'package:project/shared/custom_test_field.dart';
 import 'package:project/shared/custom_text.dart';
@@ -58,13 +63,53 @@ class _LoginViewState extends State<LoginView> {
                       textController: passwordController,
                     ),
                     Gap(40),
-                    SizedBox(
-                      width: double.infinity,
-                      child: CustomButton(
-                        text: 'login',
-                        onTap: () {
-                          if (formKey.currentState!.validate()) {}
-                        },
+                    BlocListener<LoginCubit, AuthState>(
+                      listener: (context, state) {
+                        if (state is ErrorState) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text(state.message)),
+                          );
+                        } else if (state is SuccessState) {
+                          ScaffoldMessenger.of(
+                            context,
+                          ).showSnackBar(SnackBar(content: Text('success')));
+
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return Root();
+                              },
+                            ),
+                          );
+                        } else if (state is LoadingState) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Row(
+                                children: [
+                                  Text('loading'),
+                                  CupertinoActivityIndicator(
+                                    color: Colors.white,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        }
+                      },
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: CustomButton(
+                          text: 'login',
+                          onTap: () {
+                            if (formKey.currentState!.validate()) {
+                              BlocProvider.of<LoginCubit>(context).login(
+                                email: emailController.text,
+                                password: passwordController.text       ,
+                              );
+                            }
+                          },
+                        ),
                       ),
                     ),
 

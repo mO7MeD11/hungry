@@ -27,9 +27,9 @@ class ApiService {
       return response.data;
     } catch (e) {
       if (e is DioException) {
-        return ApiException.handelError(e);
+        throw ApiException.handelError(e);
       } else {
-        return e.toString();
+        throw e.toString();
       }
     }
   }

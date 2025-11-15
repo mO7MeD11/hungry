@@ -1,10 +1,13 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:project/core/constants/app_colors.dart';
+import 'package:project/features/auth/cubit/auth_state.dart';
+import 'package:project/features/auth/cubit/signup_cubit.dart';
 import 'package:project/shared/custom_button.dart';
 import 'package:project/shared/custom_test_field.dart';
-import 'package:project/shared/custom_text.dart';
 
 class SignupView extends StatefulWidget {
   const SignupView({super.key});
@@ -18,7 +21,7 @@ class _LoginViewState extends State<SignupView> {
 
   TextEditingController passwordController = TextEditingController();
   TextEditingController nameController = TextEditingController();
-  TextEditingController confirmController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
 
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
@@ -76,22 +79,65 @@ class _LoginViewState extends State<SignupView> {
                                 isPassword: true,
                                 textController: passwordController,
                               ),
+                              Gap(10),
+                              CustomTextField(
+                                hint: 'phone',
+                                textController: phoneController,
+                              ),
 
                               Gap(40),
-                              SizedBox(
-                                width: double.infinity,
-                                child: CustomButton(
-                                  text: 'SignUp',
-                                  onTap: () {
-                                    if (formKey.currentState!.validate()) {}
-                                  },
+                              BlocListener<SignupCubit, AuthState>(
+                                listener: (context, state) {
+                                  if (state is LoadingState) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Row(
+                                          children: [
+                                            Text('loading '),
+                                            CupertinoActivityIndicator(),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  } else if (state is SuccessState) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          'Success! login now ',
+                                        ),
+                                      ),
+                                    );
+                                    Navigator.pop(context);
+                                  } else if (state is ErrorState) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(content: Text(state.message)),
+                                    );
+                                  }
+                                },
+                                child: SizedBox(
+                                  width: double.infinity,
+                                  child: CustomButton(
+                                    text: 'SignUp',
+                                    onTap: () {
+                                      if (formKey.currentState!.validate()) {
+                                        BlocProvider.of<SignupCubit>(
+                                          context,
+                                        ).Signup(
+                                          name: nameController.text,
+                                          email: emailController.text,
+                                          password: passwordController.text,
+                                          phone: phoneController.text,
+                                        );
+                                      }
+                                    },
+                                  ),
                                 ),
                               ),
                               Gap(10),
                               Row(
                                 children: [
                                   Text(
-                                    'don\'t have an account ',
+                                    'already have an account ',
                                     style: TextStyle(color: Colors.white),
                                   ),
                                   Gap(10),
@@ -101,7 +147,7 @@ class _LoginViewState extends State<SignupView> {
                                       Navigator.pop(context);
                                     },
                                     child: Text(
-                                      'register',
+                                      'login',
                                       style: TextStyle(color: Colors.red),
                                     ),
                                   ),
