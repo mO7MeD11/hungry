@@ -7,6 +7,7 @@ import 'package:project/features/auth/data/user_model.dart';
 
 class AuthRepo {
   ApiService service = ApiService();
+  UserModel? currentUser;
 
   Future<UserModel> login(String email, String password) async {
     try {
@@ -19,6 +20,7 @@ class AuthRepo {
       if (user.token != null) {
         PrefHelper.saveToken(user.token!);
       }
+      currentUser = user;
       return user;
     } on DioException catch (e) {
       throw ApiException.handelError(e);
@@ -45,7 +47,7 @@ class AuthRepo {
       if (user.token != null) {
         PrefHelper.saveToken(user.token!);
       }
-
+      currentUser = user;
       return user;
     } on DioException catch (e) {
       throw ApiException.handelError(e);
@@ -95,8 +97,10 @@ class AuthRepo {
 
     await PrefHelper.clearToken();
   }
-  
-  
-  
-  
+
+  Future<bool> autoLogin() async {
+    final token = await PrefHelper.getToken();
+
+    return token != null;
+  }
 }

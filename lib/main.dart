@@ -6,6 +6,7 @@ import 'package:project/features/auth/cubit/logout_cubit.dart';
 import 'package:project/features/auth/cubit/profile_cubit.dart';
 import 'package:project/features/auth/cubit/signup_cubit.dart';
 import 'package:project/features/auth/cubit/update_cubit.dart';
+import 'package:project/features/auth/data/auth_repo.dart';
 import 'package:project/features/auth/views/login_view.dart';
 import 'package:project/root.dart';
 
@@ -15,8 +16,29 @@ void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  AuthRepo authRepo = AuthRepo();
+  bool currentUser = false;
+
+  Future<void> checkLogin() async {
+    bool x = await authRepo.autoLogin();
+
+    currentUser = x;
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    checkLogin();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +54,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         theme: ThemeData(splashColor: Colors.transparent),
         debugShowCheckedModeBanner: false,
-        home: LoginView(),
+        home: currentUser ? Root() : LoginView(),
       ),
     );
   }
